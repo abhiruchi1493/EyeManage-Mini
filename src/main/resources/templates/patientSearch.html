@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Search a Patient</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+<script type="text/javascript" th:src="@{/js/jquery3.min.js}"></script>
+</head>
+<body>
+	<div id="wrapper" class="toggled">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" th:href="@{/}">
+						<button type="button" id="menu-toggle" class="btn btn-link">
+							<span class="glyphicon glyphicon-menu-hamburger"></span>
+						</button> EyeManage
+					</a>
+				</div>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a type="submit" th:href="@{/dashboard/logout}"
+						class="btn btn-link"><span class="glyphicon glyphicon-off"></span>
+							Logout</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<!-- Sidebar -->
+		<div id="sidebar-wrapper">
+			<ul class="sidebar-nav">
+				<li class="sidebar-brand"><a href="#"> </a></li>
+				<li><a th:href="@{/dashboard/home}"><span
+						class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+				<li><a th:href="@{/dashboard/patient}"><span
+						class="glyphicon glyphicon-user"></span> Patients</a></li>
+				<li><a th:href="@{/dashboard/visit}"><span
+						class="glyphicon glyphicon-list-alt"></span> Cases</a></li>
+				<li><a href="#"><span
+						class="glyphicon glyphicon-cog"></span> Settings</a>
+				<hr /></li>
+				<li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>
+						About</a></li>
+				<li><a href="#"><span class="glyphicon glyphicon-envelope"></span>
+						Contact</a></li>
+			</ul>
+		</div>
+		<div id="page-content-wrapper">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="page-header">
+							<h2>Search a Patient</h2>
+							<hr />
+						</div>
+						<form action="#" method="post"
+							th:action="${getMode == 'patient'} ? @{/dashboard/patientSearch/patient} : @{/dashboard/patientSearch/visit}"
+							th:object="${viewPatient}" class="form-horizontal">
+							<div class="form-group">
+								<label class="control-label col-sm-2"> Search By : </label>
+								<div class="col-sm-2">
+									<select name="filterByList" id="searchDrop"
+										th:field="*{searchFilter}" class="form-control">
+										<option value="">Select a Filter</option>
+										<option th:value="id">Id</option>
+										<option th:value="name">Name</option>
+										<option th:value="age">Age</option>
+									</select>
+								</div>
+
+								<div class="col-sm-3 input-group">
+									<input type="text" class="form-control" id="searchValue"
+										th:field="*{searchText}" placeholder="Enter a Text" />
+									<div class="input-group-btn">
+										<button class="btn btn-default" type="submit">
+											<i class="glyphicon glyphicon-search"></i>
+										</button>
+									</div>
+								</div>
+								<span class="col-sm-3" id="msg"></span>
+							</div>
+							
+							<div class="table-responsive"
+								th:if="${not #lists.isEmpty(patientDetails)}">
+								<table class="table table-striped" id="resultTable">
+									<thead>
+										<tr>
+											<th>Patient Id</th>
+											<th>Patient Name</th>
+											<th>Gender</th>
+											<th>Age</th>
+											<th>View</th>
+											<th th:if="${postMode == 'patient' and postMode != null}">Edit</th>
+											<th th:if="${postMode == 'patient'  and postMode != null}">Delete</th>
+											<th th:if="${postMode == 'visit' and postMode != null}">New Visit</th>
+											<th th:if="${postMode == 'visit' and postMode != null}">Previous Visits</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="patient : ${patientDetails}"
+											class="clickable-row" th:id="'tr' + ${patient.patientId}">
+											<td th:text="${patient.patientId}"></td>
+											<td
+												th:text="${patient.firstName} + ' ' + ${patient.lastName}"></td>
+											<td th:text="${patient.gender}"></td>
+											<td th:text="${patient.age}"></td>
+											<td>
+												<button type="button" class="btn"
+													data-toggle="modal"
+													th:attr="data-target='#viewModal' + ${patient.patientId}">View</button>
+
+												<!-- View Modal -->
+												<div th:attr="id='viewModal' + ${patient.patientId}"
+													class="modal fade" role="dialog">
+													<div class="modal-dialog">
+														<!-- Modal content-->
+														<div class="modal-content">
+															<div class="modal-header">
+																<button type="button" class="close" data-dismiss="modal">&times;</button>
+																<h4 class="modal-title">Personal Details</h4>
+															</div>
+															<div class="modal-body">
+																<table class="table table-striped">
+																	<tr>
+																		<th>Patient Id</th>
+																		<td th:text="${patient.patientId}"></td>
+																	</tr>
+																	<tr>
+																		<th>First Name</th>
+																		<td th:text="${patient.firstName}"></td>
+																	</tr>
+																	<tr>
+																		<th>Last Name</th>
+																		<td th:text="${patient.lastName}"></td>
+																	</tr>
+																	<tr>
+																		<th>Gender</th>
+																		<td th:text="${patient.gender}"></td>
+																	</tr>
+																	<tr>
+																		<th>Birth Date</th>
+																		<td
+																			th:text="${#dates.format(patient.birthDate,'dd-MMM-yyyy')}"></td>
+																	</tr>
+																	<tr>
+																		<th>Age</th>
+																		<td th:text="${patient.age}"></td>
+																	</tr>
+																	<tr>
+																		<th>Email</th>
+																		<td th:text="${patient.email}"></td>
+																	</tr>
+																	<tr>
+																		<th>Mobile</th>
+																		<td th:text="${patient.mobile}"></td>
+																	</tr>
+																	<tr>
+																		<th>Phone</th>
+																		<td th:text="${patient.phoneNumber}"></td>
+																	</tr>
+																	<tr>
+																		<th>Registration Date</th>
+																		<td
+																			th:text="${#dates.format(patient.firstVisitDate,'dd-MMM-yyyy')}"></td>
+																	</tr>
+																</table>
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-default"
+																	data-dismiss="modal">Close</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td th:if="${postMode == 'patient' and postMode != null}">
+												<button type="button" class="btn btn-success"
+													data-toggle="modal"
+													th:attr="data-target='#editModal' + ${patient.patientId}">Edit</button>
+
+												<!-- Edit Modal -->
+												<div th:attr="id='editModal' + ${patient.patientId}"
+													class="modal fade" role="dialog">
+													<div class="modal-dialog">
+														<!-- Modal content-->
+														<div class="modal-content">
+															<div class="modal-header">
+																<button type="button" class="close" data-dismiss="modal">&times;</button>
+																<h4 class="modal-title">Edit Personal Details</h4>
+															</div>
+															<div class="modal-body">
+																<table class="table table-striped">
+																	<tr>
+																		<th>Patient Id</th>
+																		<td><input th:attr="id= ${patient.patientId}" type="text"
+																			th:value="${patient.patientId}" readonly="true" /></td>
+																	</tr>
+																	<tr>
+																		<th>First Name</th>
+																		<td><input th:attr="id= ${patient.patientId} + '_' + ${patient.firstName}" type="text"
+																			th:value="${patient.firstName}" /></td>
+																	</tr>
+																	<tr>
+																		<th>Last Name</th>
+																		<td><input th:attr="id= ${patient.patientId} + '_' + ${patient.lastName}" type="text"
+																			th:value="${patient.lastName}" /></td>
+																	</tr>
+																	<tr>
+																		<th>Gender</th>
+																		<td><input th:attr="id=${patient.patientId} + '_'  + ${patient.gender}" type="text"
+																			th:value="${patient.gender}" /></td>
+																	</tr>
+
+																	<tr>
+																		<th>Birth Date</th>
+																		<td><input th:attr="id= ${patient.patientId} + '_' + ${patient.birthDate}" type="text"
+																			th:value="${#dates.format(patient.birthDate,'dd-MM-yyyy')}"
+																			readonly="true" /></td>
+																	</tr>
+																	<tr>
+																		<th>Age</th>
+																		<td><input th:attr="id= ${patient.patientId} + '_' + ${patient.age}" type="text"
+																			th:value="${patient.age}" readonly="true" /></td>
+																	</tr>
+																	<tr>
+																		<th>Email</th>
+																		<td><input th:attr="id= ${patient.patientId} + '_' + ${patient.email}" type="text"
+																			th:value="${patient.email}" /></td>
+																	</tr>
+																	<tr>
+																		<th>Mobile</th>
+																		<td><input th:attr="id= ${patient.patientId} + '_' + ${patient.mobile}" type="text"
+																			th:value="${patient.mobile}" /></td>
+																	</tr>
+																	<tr>
+																		<th>Phone</th>
+																		<td><input th:attr="id= ${patient.patientId} + '_' + ${patient.phoneNumber}"
+																			type="text" th:value="${patient.phoneNumber}" /></td>
+																	</tr>
+																	<tr>
+																		<th>Registration Date</th>
+																		<td
+																			th:text="${#dates.format(patient.firstVisitDate,'dd-MM-yyyy')}">
+																		</td>
+																	</tr>
+																</table>
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-success edit_model"
+																	data-dismiss="modal"
+																	th:onclick="'editBtn(
+																	document.getElementById(\'' + ${patient.patientId} + '\').value,
+																	document.getElementById(\'' + ${patient.patientId} + '_'  + ${patient.firstName} + '\').value,
+																	document.getElementById(\'' + ${patient.patientId} + '_'  + ${patient.lastName} + '\').value,
+																	document.getElementById(\'' + ${patient.patientId} + '_' + ${patient.gender} + '\').value,
+																	document.getElementById(\'' + ${patient.patientId} + '_'  + ${patient.email} + '\').value,
+																	document.getElementById(\'' + ${patient.patientId} + '_'  + ${patient.mobile} + '\').value,
+																	document.getElementById(\'' + ${patient.patientId} + '_'  + ${patient.phoneNumber} + '\').value);'">
+																	Submit
+																</button>
+																<button type="button" class="btn btn-default"
+																	data-dismiss="modal">Close</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td th:if="${postMode == 'patient' and postMode != null}">
+												<button type="button" class="btn btn-danger"
+													data-toggle="modal"
+													th:attr="data-target='#deleteModal' + ${patient.patientId}">Delete</button>
+												<!-- Delete Confirmation Modal -->
+												<div th:attr="id='deleteModal' + ${patient.patientId}"
+													class="modal fade" role="dialog">
+													<div class="modal-dialog">
+
+														<!-- Delete Modal content-->
+														<div class="modal-content">
+															<div class="modal-body">
+																<p th:text="#{patient.delete.confirmation}"></p>
+															</div>
+															<div class="modal-footer">
+																<button type="button" class="btn btn-danger"
+																th:onclick="'deleteBtn(\'' + ${patient.patientId} + '\');'"
+																	data-dismiss="modal">Yes, I want to delete it</button>
+																<button type="button" class="btn btn-default"
+																	data-dismiss="modal">No</button>
+															</div>
+														</div>
+
+													</div>
+												</div>
+												<!-- / Delete Confirmation Modal -->
+											</td>
+											<!-- <button class="btn btn-danger">Delete</button>  ${patient.patientId} -->
+											<td th:if="${postMode == 'visit' and postMode != null}">
+												<a type="button" class="btn btn-success" data-toggle="modal"
+													th:href="@{/dashboard/newVisit?(id=${patient.patientId})}">New Visit</a> 
+													
+											</td>
+											<td th:if="${postMode == 'visit' and postMode != null}">
+												<a type="button" class="btn btn-default"
+													th:href="@{/dashboard/visitHistory/__${patient.patientId}__}">Previous Visits</a>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script type="text/javascript" th:src="@{/js/bootstrap.js}"></script>
+	<script type="text/javascript" th:src="@{/js/main.js}"></script>
+	<script type="text/javascript" th:src="@{/js/ajaxCalls.js}"></script>
+	<script>
+            // When the document is ready
+            $("#menu-toggle").click(function(e) {
+        	    e.preventDefault();
+           	    $("#wrapper").toggleClass("toggled");
+        	});
+        </script>
+</body>
+</html>

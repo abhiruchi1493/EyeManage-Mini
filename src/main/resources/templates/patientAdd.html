@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Add a New Patient</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+<script type="text/javascript" th:src="@{/js/jquery3.min.js}"></script>
+</head>
+<body>
+	<div id="wrapper" class="toggled">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" th:href="@{/}">
+						<button type="button" id="menu-toggle" class="btn btn-link">
+							<span class="glyphicon glyphicon-menu-hamburger"></span>
+						</button> EyeManage
+					</a>
+				</div>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a type="submit" th:href="@{/dashboard/logout}"
+						class="btn btn-link"><span class="glyphicon glyphicon-off"></span>
+							Logout</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<!-- Sidebar -->
+		<div id="sidebar-wrapper">
+			<ul class="sidebar-nav">
+				<li class="sidebar-brand"><a href="#"> </a></li>
+				<li><a th:href="@{/dashboard/home}"><span
+						class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+				<li><a th:href="@{/dashboard/patient}"><span
+						class="glyphicon glyphicon-user"></span> Patients</a></li>
+				<li><a th:href="@{/dashboard/visit}"><span
+						class="glyphicon glyphicon-list-alt"></span> Cases</a></li>
+				<li><a href="#"><span
+						class="glyphicon glyphicon-cog"></span> Settings</a>
+				<hr /></li>
+				<li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>
+						About</a></li>
+				<li><a href="#"><span class="glyphicon glyphicon-envelope"></span>
+						Contact</a></li>
+			</ul>
+		</div>
+		<div id="page-content-wrapper">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="page-header">
+							<h2>Add a Patient</h2>
+							<hr />
+						</div>
+						<form action="#" method="post"
+							th:action="@{/dashboard/patientCreate}" th:object="${newPatient}"
+							class="form-horizontal">
+							<div class="form-group">
+								<label class="control-label col-sm-2"> First Name : </label>
+								<div class="input-group col-sm-3">
+									<input type="text" th:field="*{firstName}" class="form-control"
+										placeholder="Enter First Name" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-sm-2"> Last Name : </label>
+								<div class="input-group col-sm-3">
+									<input type="text" th:field="*{lastName}" class="form-control"
+										placeholder="Enter Last Name" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-sm-2"> Address : </label>
+								<div class="input-group col-sm-3">
+									<input type="text" th:field="*{address}" class="form-control"
+										placeholder="Enter Address" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-sm-2"> Email : </label>
+								<div class="input-group col-sm-3">
+									<input type="email" th:field="*{email}" class="form-control"
+										placeholder="Enter Email" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<!-- <input type="text" class="form-control"> -->
+								<label class="control-label col-sm-2"> Date Of Birth : </label>
+								<div class="input-group date col-sm-3">
+									<input type="date" class="form-control" th:field="*{birthDate}"
+										placeholder="Click to select date" id="birthDate"  /> <span
+										class="input-group-addon"><span
+										class="glyphicon glyphicon-calendar" id="datePicker"></span> </span>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-sm-2"> Age : </label>
+								<div class="input-group col-sm-3">
+									<input type="text" th:field="*{age}" class="form-control"
+										placeholder="Enter Age" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-sm-2"> Gender : </label>
+								<div class="input-group col-sm-3">
+									<select name="genderList" th:field="*{gender}"
+										class="form-control">
+										<option value="">Select Gender</option>
+										<option th:value="M">Male</option>
+										<option th:value="F">Female</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-sm-2"> Mobile : </label>
+								<div class="input-group col-sm-3">
+									<input type="text" pattern="[0-9]{10}" th:field="*{mobile}"
+										class="form-control" placeholder="Enter a mobile number" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label class="control-label col-sm-2"> Phone : </label>
+								<div class="input-group col-sm-3">
+									<input type="text" pattern="[0-9]{10}"
+										th:field="*{phoneNumber}" class="form-control"
+										placeholder="Enter a Phone Number" />
+								</div>
+							</div>
+
+							<div class="form-group">
+								<span th:if="${patientCreateResult} != null" th:text=""></span>
+								<div class="col-sm-offset-4 col-sm-1">
+									<input type="submit" value="Add" class="btn btn-success" />
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script type="text/javascript" th:src="@{/js/bootstrap.js}"></script>
+	<script type="text/javascript" th:src="@{/js/bootstrap-datepicker.js}"></script>
+	<script type="text/javascript" th:src="@{/js/main.js}"></script>
+	<script type="text/javascript">
+            // When the document is ready
+            $(document).ready(function () {
+                $('#birthDate').datepicker({
+                    format: "yyyy-mm-dd"
+                });  
+            });
+            $("#menu-toggle").click(function(e) {
+        	    e.preventDefault();
+           	    $("#wrapper").toggleClass("toggled");
+        	});
+        </script>
+
+</body>
+</html>

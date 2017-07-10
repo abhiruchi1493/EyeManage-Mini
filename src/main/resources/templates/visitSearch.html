@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Case Management</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+
+<script type="text/javascript" th:src="@{/js/jquery3.min.js}"></script>
+</head>
+<body>
+	<div id="wrapper" class="toggled">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+
+					<a class="navbar-brand" th:href="@{/}">
+						<button type="button" id="menu-toggle" class="btn btn-link">
+							<span class="glyphicon glyphicon-menu-hamburger"></span>
+						</button> EyeManage
+					</a>
+				</div>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a type="submit" th:href="@{/dashboard/logout}"
+						class="btn btn-link"><span class="glyphicon glyphicon-off"></span>
+							Logout</a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<!-- Sidebar -->
+		<div id="sidebar-wrapper">
+			<ul class="sidebar-nav">
+				<li class="sidebar-brand"><a href="#"> </a></li>
+				<li><a th:href="@{/dashboard/home}"><span
+						class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+				<li><a th:href="@{/dashboard/patient}"><span
+						class="glyphicon glyphicon-user"></span> Patients</a></li>
+				<li><a th:href="@{/dashboard/visit}"><span
+						class="glyphicon glyphicon-list-alt"></span> Cases</a></li>
+				<li><a href="#"><span class="glyphicon glyphicon-cog"></span>
+						Settings</a>
+					<hr /></li>
+				<li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>
+						About</a></li>
+				<li><a href="#"><span class="glyphicon glyphicon-envelope"></span>
+						Contact</a></li>
+			</ul>
+		</div>
+		<!-- Page Content -->
+		<div id="page-content-wrapper">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="page-header">
+							<h2>Visit History</h2>
+							<hr />
+						</div>
+						<form action="#" method="post"
+							th:action="@{/dashboard/visitSearch}"
+							th:object="${visitObj}" class="form-horizontal">
+							<div class="form-group">
+								<label class="control-label col-sm-2"> Search By : </label>
+								<div class="col-sm-2">
+									<select name="filterByList" id="searchDrop"
+										th:field="*{searchFilter}" class="form-control">
+										<option value="">Select a Filter</option>
+										<option th:value="name">Name</option>
+									</select>
+								</div>
+
+								<div class="col-sm-3 input-group">
+									<input type="text" class="form-control" id="searchValue"
+										th:field="*{searchText}" placeholder="Enter a Text" />
+									<div class="input-group-btn">
+										<button class="btn btn-default" type="submit">
+											<i class="glyphicon glyphicon-search"></i>
+										</button>
+									</div>
+								</div>
+								<span class="col-sm-3" id="msg"></span>
+							</div>
+							<div class="table-responsive">
+								<table class="table table-striped" id="resultTable">
+									<thead>
+										<tr>
+											<th>Visit Id</th>
+											<th>Patient Id</th>
+											<th>Patient Name</th>
+											<th>Description</th>
+											<th>Fees</th>
+											<th>Visit Date</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:if="${not #lists.isEmpty(visitList)}"
+											th:each="visit : ${visitList}" class="clickable-row">
+											<td th:text="${visit.visitId}"></td>
+											<td th:text="${visit.patient.patientId}"></td>
+											<td th:text="${visit.patient.firstName} + ' ' + ${visit.patient.lastName}"></td>
+											<!-- <td th:text="${visit.description}"></td> -->
+											<td><textarea rows="3" th:text="${visit.description}"
+													class="form-control" readonly="true"></textarea></td>
+											<td th:text="${visit.fees}"></td>
+											<td th:text="${#dates.format(visit.visitDate,'dd-MMM-yyyy')}"></td>
+										</tr>
+									</tbody>
+								</table>
+								<div th:if="${#lists.isEmpty(visitList)}">
+									<p th:text="#{visit.noVisitFound}"></p>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /#page-content-wrapper -->
+	</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script type="text/javascript" th:src="@{/js/bootstrap.js}"></script>
+	<script>
+		$("#menu-toggle").click(function(e) {
+			e.preventDefault();
+			$("#wrapper").toggleClass("toggled");
+		});
+		$(document).ready(function() {
+			$(".tile").height($("#tile1").width());
+			$(".carousel").height($("#tile1").width());
+			$(".item").height($("#tile1").width());
+
+			$(window).resize(function() {
+				if (this.resizeTO)
+					clearTimeout(this.resizeTO);
+				this.resizeTO = setTimeout(function() {
+					$(this).trigger('resizeEnd');
+				}, 10);
+			});
+
+			$(window).bind('resizeEnd', function() {
+				$(".tile").height($("#tile1").width());
+				$(".carousel").height($("#tile1").width());
+				$(".item").height($("#tile1").width());
+			});
+
+		});
+	</script>
+</body>
+</html>

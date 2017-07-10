@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>EyeManage</title>
+<meta name="viewport" http-equiv="Content-Type"
+	content="text/html,charset=UTF-8, width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+<script type="text/javascript" th:src="@{/js/jquery3.min.js}"></script>
+</head>
+<body>
+	<nav class="navbar navbar-inverse">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" th:href="@{/}">EyeManage</a>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<div class="jumbotron">
+
+			<h1 class="text-center">EyeManage</h1>
+			<hr />
+			<br />
+			<div class="row">
+				<div class="col-sm-6">
+					<p class="text-primary text-left lead">
+						<br /> A simple to use Electronic Medical Record and Clinic
+						Management software for Clinics. <br /> Browser based software
+						deployed on your Local Area Network or the Cloud as per your need.
+						<br /> We provide Accessible, On Time and Patient Centric care
+						with managed Workflow and Reminders.
+					</p>
+				</div>
+				<!-- ${isForgotPassSuccess != null} && -->
+				<!-- <div>
+					
+				</div> -->
+				<div class="col-sm-6">
+					<th:block th:if="${param.reset != null}">
+						<div th:if=" ${param.reset[0]} == 'success'"
+						class="alert alert-success msg" th:text="#{forgotPassword.success}"></div>
+					</th:block>
+					<th:block th:if="${param.signUpResult != null}">
+						<div th:if="${param.signUpResult[0]} == '1'"
+							class="alert alert-success msg" th:text="#{registration.success}"></div>
+						<div th:if="${param.signUpResult[0]} == '2'"
+							class="alert alert-danger msg"
+							th:text="#{registration.error.couldNotAdd}"></div>
+						<div th:if="${param.signUpResult[0]} == '3'"
+							class="alert alert-danger msg"
+							th:text="#{registration.error.passwordDoNotMatch}"></div>
+						<div th:if="${param.signUpResult[0]} == '4'"
+							class="alert alert-danger msg"
+							th:text="#{registration.error.usernameExists}"></div>
+						<div th:if="${param.signUpResult[0]} == '0'"
+							class="alert alert-danger msg"
+							th:text="#{registration.exception}"></div>
+					</th:block>
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="#login">Login</a></li>
+						<li><a data-toggle="tab" href="#register">Register</a></li>
+					</ul>
+					<br />
+					<div class="tab-content">
+						<!-- Result Messages -->
+
+						<!-- Result Messages End -->
+						<div id="login" class="tab-pane fade in active">
+							<form action="#" method="post" th:action="@{/login}"
+								th:object="${user}" class="form-horizontal" name="loginForm">
+								<div class="form-group input-group col-sm-7">
+									<span class="input-group-addon"><i
+										class="glyphicon glyphicon-user"></i></span> <input type="text"
+										th:field="*{userName}" placeholder="Enter User Name"
+										class="form-control" name="userNameTxt" id="userNameTxt" />
+								</div>
+
+								<div class="form-group input-group col-sm-7">
+									<span class="input-group-addon"><i
+										class="glyphicon glyphicon-lock"></i></span> <input type="password"
+										th:field="*{password}" placeholder="Enter Password"
+										class="form-control" />
+								</div>
+
+								<div class="form-group input-group">
+									<input type="submit" value="Login" class="btn btn-success" /> <span
+										th:if="${param.loginError}" class="alert alert-danger msg"
+										th:text="#{login.error}"></span>
+								</div>
+
+								<div class="form-group input-group">
+									<a th:href="@{/forgotPassword}">Forgot Password?</a>
+								</div>
+							</form>
+						</div>
+
+						<div id="register" class="tab-pane fade">
+							<form action="#" method="post" th:action="@{/registration}"
+								th:object="${newUser}" class="form-horizontal"
+								name="registrationForm">
+								<div class="form-group">
+									<label class="control-label col-sm-4"> UserName : </label>
+									<div class="col-sm-8">
+										<input type="text" th:field="*{userName}"
+											placeholder="Enter User Name" class="form-control"
+											id="userNameTxt1" name="userNameTxt1" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="control-label col-sm-4"> Name : </label>
+									<div class="col-sm-8">
+										<input type="text" th:field="*{name}" placeholder="Enter Name"
+											class="form-control" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="control-label col-sm-4"> Email : </label>
+									<div class="col-sm-8">
+										<input type="email" th:field="*{email}"
+											placeholder="Enter Email" class="form-control" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="control-label col-sm-4"> Password : </label>
+									<div class="col-sm-8">
+										<input type="password" th:field="*{password}"
+											placeholder="Enter Password" class="form-control" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="control-label col-sm-4"> Confirm Password
+										: </label>
+									<div class="col-sm-8">
+										<input type="password" th:field="*{cnfPassword}"
+											placeholder="Re-enter Password" class="form-control" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="control-label col-sm-4"> Security
+										Question : </label>
+									<div class="col-sm-8">
+										<select name="questionList" th:field="*{secQuest}"
+											class="form-control">
+											<option value="">Select Option</option>
+											<option th:each="question : ${questions}"
+												th:value="${question.question}"
+												th:text="${question.id} + ' : ' + ${question.question}"></option>
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="control-label col-sm-4"> Answer : </label>
+									<div class="col-sm-8">
+										<input type="password" th:field="*{answer}"
+											placeholder="Enter an answer" class="form-control" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-sm-offset-4 col-sm-8">
+										<input type="submit" value="Register" class="btn btn-success" />
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.container -->
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+	
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script type="text/javascript" th:src="@{/js/bootstrap.js}"></script>
+
+</body>
+</html>

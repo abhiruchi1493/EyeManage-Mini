@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta name="viewport" http-equiv="Content-Type"
+	content="text/html,charset=UTF-8, width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}" />
+<script type="text/javascript" th:src="@{/js/jquery3.min.js}"></script>
+</head>
+
+<body>
+	<div id="wrapper" class="toggled">
+		<nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="navbar">
+			<div class="container-fluid">
+				<div class="navbar-header">
+
+					<a class="navbar-brand" th:href="@{/}">
+						<button type="button" id="menu-toggle" class="btn btn-link">
+							<span class="glyphicon glyphicon-menu-hamburger"></span>
+						</button> EyeManage
+					</a>
+				</div>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a type="submit" th:href="@{/dashboard/logout}"
+						class="btn btn-link"><span class="glyphicon glyphicon-off"></span>
+							Logout</a></li>
+				</ul>
+			</div>
+		</nav>
+		<!-- Sidebar -->
+		<div id="sidebar-wrapper" th:fragment="sidebar">
+			<ul class="sidebar-nav">
+				<li class="sidebar-brand"><a href="#"> </a></li>
+				<li><a th:href="@{/dashboard/home}"><span
+						class="glyphicon glyphicon-dashboard"></span> Dashboard</a></li>
+				<li><a th:href="@{/dashboard/patient}"><span
+						class="glyphicon glyphicon-user"></span> Patients</a></li>
+				<li><a th:href="@{/dashboard/visit}"><span
+						class="glyphicon glyphicon-list-alt"></span> Cases</a></li>
+				<li><a href="#"><span class="glyphicon glyphicon-cog"></span>
+						Settings</a>
+					<hr /></li>
+				<li><a href="#"><span class="glyphicon glyphicon-info-sign"></span>
+						About</a></li>
+				<li><a href="#"><span class="glyphicon glyphicon-envelope"></span>
+						Contact</a></li>
+			</ul>
+		</div>
+	</div>
+	<!-- /#sidebar-wrapper -->
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+
+	<!-- Menu Toggle Script -->
+	<script>
+		$("#menu-toggle").click(function(e) {
+			e.preventDefault();
+			$("#wrapper").toggleClass("toggled");
+		});
+	</script>
+
+</body>
+
+</html>
